@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TürkçePro – Türkisch auf C1-Niveau meistern</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #C8102E;
+      --red-dark: #9B0022;
+      --red-light: #E8293F;
+      --gold: #C9960C;
+      --gold-light: #F0B429;
+      --cream: #FAF7F2;
+      --dark: #1A0A0E;
+      --gray: #6B6B6B;
+      --white: #FFFFFF;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--cream);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ─── LANGUAGE TOGGLE ─── */
+    .lang-bar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      justify-content: flex-end;
+      padding: 12px 32px;
+      background: rgba(250,247,242,0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid rgba(200,16,46,0.12);
+    }
+    .lang-toggle {
+      display: flex;
+      gap: 0;
+      border: 1.5px solid var(--red);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .lang-btn {
+      padding: 6px 16px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      color: var(--red);
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+    .lang-btn.active {
+      background: var(--red);
+      color: white;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 56px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 80px 64px 80px 80px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .flag-accent {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 32px;
+    }
+    .flag-stripe {
+      width: 40px;
+      height: 4px;
+      background: var(--red);
+      border-radius: 2px;
+    }
+    .flag-label {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    .hero-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 5vw, 72px);
+      font-weight: 900;
+      line-height: 1.05;
+      color: var(--dark);
+      margin-bottom: 8px;
+    }
+    .hero-title span {
+      color: var(--red);
+    }
+    .hero-subtitle-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.5vw, 48px);
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 28px;
+    }
+
+    .hero-desc {
+      font-size: 18px;
+      font-weight: 300;
+      line-height: 1.7;
+      color: #444;
+      max-width: 460px;
+      margin-bottom: 44px;
+    }
+
+    .cta-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 420px;
+    }
+    .cta-input-row {
+      display: flex;
+      gap: 0;
+      border: 2px solid var(--red);
+      border-radius: 8px;
+      overflow: hidden;
+      background: white;
+    }
+    .cta-input {
+      flex: 1;
+      padding: 14px 20px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--dark);
+    }
+    .cta-btn {
+      padding: 14px 28px;
+      background: var(--red);
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+      white-space: nowrap;
+    }
+    .cta-btn:hover { background: var(--red-dark); }
+
+    .cta-note {
+      font-size: 13px;
+      color: var(--gray);
+    }
+    .cta-note strong { color: var(--gold); }
+
+    .success-msg {
+      display: none;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      background: #F0FDF4;
+      border: 1.5px solid #22C55E;
+      border-radius: 8px;
+      color: #166534;
+      font-size: 15px;
+    }
+
+    /* ─── HERO RIGHT ─── */
+    .hero-right {
+      position: relative;
+      background: var(--red);
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-right::before {
+      content: '☽';
+      position: absolute;
+      font-size: 420px;
+      color: rgba(255,255,255,0.06);
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      line-height: 1;
+    }
+
+    /* ─── VARIANT SHOWCASE ─── */
+    .mockup-card {
+      background: rgba(15,5,8,0.55);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 20px;
+      padding: 28px 28px 24px;
+      width: 380px;
+      backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 2;
+      box-shadow: 0 32px 64px rgba(0,0,0,0.4);
+    }
+
+    .mockup-top-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 20px;
+    }
+    .mockup-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+    }
+    .mockup-dot-r { background: #FF5F57; }
+    .mockup-dot-y { background: #FFBD2E; }
+    .mockup-dot-g { background: #28C840; }
+    .mockup-window-title {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+      margin-left: 6px;
+      letter-spacing: 0.06em;
+    }
+
+    .mockup-input-block {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 18px;
+    }
+    .mockup-input-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 7px;
+    }
+    .mockup-input-text {
+      font-size: 14px;
+      color: rgba(255,255,255,0.85);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .mockup-arrow {
+      text-align: center;
+      font-size: 18px;
+      color: rgba(255,255,255,0.2);
+      margin-bottom: 14px;
+      letter-spacing: 4px;
+    }
+
+    .mockup-variants-label {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+      margin-bottom: 10px;
+    }
+
+    .variant-row {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      padding: 12px 14px;
+      border-radius: 10px;
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: opacity 0.4s ease, transform 0.4s ease;
+    }
+    .variant-row.visible {
+      opacity: 1;
+      transform: translateX(0);
+    }
+    .variant-row.v-business {
+      background: rgba(59, 130, 246, 0.12);
+      border: 1px solid rgba(59,130,246,0.25);
+    }
+    .variant-row.v-colloquial {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34,197,94,0.22);
+    }
+    .variant-row.v-c1 {
+      background: rgba(201,150,12,0.12);
+      border: 1px solid rgba(201,150,12,0.3);
+    }
+
+    .variant-badge {
+      flex-shrink: 0;
+      font-size: 9px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 7px;
+      border-radius: 4px;
+      margin-top: 1px;
+      white-space: nowrap;
+    }
+    .v-business .variant-badge { background: rgba(59,130,246,0.3); color: #93C5FD; }
+    .v-colloquial .variant-badge { background: rgba(34,197,94,0.25); color: #86EFAC; }
+    .v-c1 .variant-badge { background: rgba(201,150,12,0.3); color: var(--gold-light); }
+
+    .variant-content { flex: 1; }
+    .variant-text {
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.82);
+      line-height: 1.55;
+      margin-bottom: 4px;
+    }
+    .variant-note {
+      font-size: 10.5px;
+      color: rgba(255,255,255,0.35);
+      font-style: italic;
+    }
+
+    .mockup-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 13px;
+      background: rgba(255,255,255,0.6);
+      margin-left: 2px;
+      vertical-align: middle;
+      animation: blink 1s step-end infinite;
+    }
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* ─── PAIN POINTS ─── */
+    .section {
+      padding: 100px 80px;
+    }
+    .section-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .section-label-line {
+      width: 32px;
+      height: 2px;
+      background: var(--red);
+    }
+    .section-label-text {
+      font-size: 12px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--red);
+      font-weight: 500;
+    }
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 3.5vw, 52px);
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 60px;
+      max-width: 600px;
+    }
+
+    .pain-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+      max-width: 900px;
+    }
+    .pain-card {
+      background: white;
+      border: 1px solid rgba(200,16,46,0.1);
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .pain-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(200,16,46,0.08);
+    }
+    .pain-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+    .pain-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: var(--dark);
+    }
+    .pain-desc {
+      font-size: 15px;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    /* ─── FEATURES ─── */
+    .features-section {
+      background: var(--dark);
+      color: white;
+      padding: 100px 80px;
+    }
+    .features-section .section-label-line { background: var(--gold); }
+    .features-section .section-label-text { color: var(--gold); }
+    .features-section .section-title { color: white; }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .feature-card {
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s;
+    }
+    .feature-card:hover {
+      border-color: rgba(201,150,12,0.4);
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, var(--red), var(--gold));
+    }
+    .feature-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 900;
+      color: rgba(255,255,255,0.06);
+      position: absolute;
+      top: 16px; right: 20px;
+      line-height: 1;
+    }
+    .feature-icon { font-size: 24px; margin-bottom: 16px; }
+    .feature-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 10px;
+      color: white;
+    }
+    .feature-desc {
+      font-size: 14px;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.65;
+    }
+
+    /* ─── SOCIAL PROOF ─── */
+    .quote-section {
+      padding: 100px 80px;
+      background: white;
+    }
+    .quote-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 28px;
+      margin-top: 60px;
+    }
+    .quote-card {
+      background: var(--cream);
+      border-radius: 12px;
+      padding: 28px;
+    }
+    .quote-stars {
+      color: var(--gold);
+      font-size: 16px;
+      margin-bottom: 14px;
+      letter-spacing: 2px;
+    }
+    .quote-text {
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--dark);
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .quote-author {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--gray);
+    }
+    .quote-author span {
+      color: var(--red);
+    }
+
+    /* ─── BOTTOM CTA ─── */
+    .bottom-cta {
+      background: var(--red);
+      padding: 100px 80px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .bottom-cta::before {
+      content: '★';
+      position: absolute;
+      font-size: 600px;
+      color: rgba(255,255,255,0.03);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .bottom-cta .section-label {
+      justify-content: center;
+    }
+    .bottom-cta .section-label-line { background: rgba(255,255,255,0.4); }
+    .bottom-cta .section-label-text { color: rgba(255,255,255,0.7); }
+    .bottom-cta .section-title {
+      color: white;
+      max-width: 700px;
+      margin: 0 auto 20px;
+    }
+    .bottom-cta-desc {
+      color: rgba(255,255,255,0.7);
+      font-size: 17px;
+      margin-bottom: 48px;
+    }
+    .bottom-form {
+      display: flex;
+      gap: 0;
+      max-width: 480px;
+      margin: 0 auto;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-radius: 8px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.1);
+    }
+    .bottom-input {
+      flex: 1;
+      padding: 16px 20px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+    }
+    .bottom-input::placeholder { color: rgba(255,255,255,0.5); }
+    .bottom-btn {
+      padding: 16px 28px;
+      background: white;
+      color: var(--red);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .bottom-btn:hover { background: var(--cream); }
+    .bottom-note {
+      margin-top: 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 32px 80px;
+      background: var(--dark);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: white;
+    }
+    .footer-brand span { color: var(--red); }
+    .footer-note {
+      font-size: 13px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-right { min-height: 400px; }
+      .hero-left { padding: 60px 32px; }
+      .section { padding: 70px 32px; }
+      .pain-grid { grid-template-columns: 1fr; }
+      .features-grid { grid-template-columns: 1fr; }
+      .features-section { padding: 70px 32px; }
+      .quote-grid { grid-template-columns: 1fr; }
+      .quote-section { padding: 70px 32px; }
+      .bottom-cta { padding: 70px 32px; }
+      footer { flex-direction: column; gap: 12px; padding: 24px 32px; }
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-left > * {
+      animation: fadeUp 0.6s ease both;
+    }
+    .hero-left > *:nth-child(1) { animation-delay: 0.1s; }
+    .hero-left > *:nth-child(2) { animation-delay: 0.2s; }
+    .hero-left > *:nth-child(3) { animation-delay: 0.3s; }
+    .hero-left > *:nth-child(4) { animation-delay: 0.4s; }
+    .hero-left > *:nth-child(5) { animation-delay: 0.5s; }
+
+    /* hidden language content */
+    [data-lang] { display: none; }
+    .lang-de [data-lang="de"] { display: block; }
+    .lang-de [data-lang="de"].inline { display: inline; }
+    .lang-en [data-lang="en"] { display: block; }
+    .lang-en [data-lang="en"].inline { display: inline; }
+    body { } /* set by JS */
+  </style>
+</head>
+<body class="lang-de">
+
+  <!-- Language Toggle -->
+  <nav class="lang-bar">
+    <div class="lang-toggle">
+      <button class="lang-btn active" onclick="setLang('de')">DE</button>
+      <button class="lang-btn" onclick="setLang('en')">EN</button>
+    </div>
+  </nav>
+
+  <!-- ═══════════ HERO ═══════════ -->
+  <section class="hero">
+    <div class="hero-left">
+      <div class="flag-accent">
+        <div class="flag-stripe"></div>
+        <span class="flag-label" data-lang="de">B1 → C1 · Aktives Schreiben</span>
+        <span class="flag-label" data-lang="en">B1 → C1 · Active Writing</span>
+      </div>
+
+      <h1 class="hero-title" data-lang="de">
+        Türkisch wirklich<br><span>beherrschen.</span>
+      </h1>
+      <h1 class="hero-title" data-lang="en">
+        Master Turkish.<br><span>For real.</span>
+      </h1>
+
+      <div class="hero-subtitle-brand">TürkçePro</div>
+
+      <p class="hero-desc" data-lang="de">
+        Du sprichst Türkisch – aber Geschäftsbriefe, formale Texte oder elegante Deyimler fühlen sich noch unsicher an. TürkçePro gibt dir AI-gestütztes Feedback auf deinen eigenen Texten – auf Deutsch erklärt.
+      </p>
+      <p class="hero-desc" data-lang="en">
+        You speak Turkish – but business writing, formal texts, or elegant deyimler still feel out of reach. TürkçePro gives you AI-powered feedback on your own writing, explained in your language.
+      </p>
+
+      <div class="cta-group">
+        <div class="cta-input-row">
+          <input class="cta-input" type="email" id="email-hero" placeholder="deine@email.de" />
+          <button class="cta-btn" onclick="submitEmail('email-hero', 'success-hero')" data-lang="de">Beta-Zugang anfragen</button>
+          <button class="cta-btn" onclick="submitEmail('email-hero', 'success-hero')" data-lang="en" style="display:none">Request Beta Access</button>
+        </div>
+        <div class="success-msg" id="success-hero">
+          ✓ <span data-lang="de">Danke! Wir melden uns in Kürze.</span><span data-lang="en">Thanks! We'll be in touch soon.</span>
+        </div>
+        <p class="cta-note" data-lang="de">Kostenloser Beta-Zugang · <strong>Limitierte Plätze</strong> · Kein Spam</p>
+        <p class="cta-note" data-lang="en">Free beta access · <strong>Limited spots</strong> · No spam</p>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="mockup-card">
+
+        <!-- Window chrome -->
+        <div class="mockup-top-bar">
+          <div class="mockup-dot mockup-dot-r"></div>
+          <div class="mockup-dot mockup-dot-y"></div>
+          <div class="mockup-dot mockup-dot-g"></div>
+          <span class="mockup-window-title">TürkçePro · Analyse</span>
+        </div>
+
+        <!-- User input -->
+        <div class="mockup-input-block">
+          <div class="mockup-input-label" data-lang="de">Dein Text</div>
+          <div class="mockup-input-label" data-lang="en">Your text</div>
+          <div class="mockup-input-text">„Toplantıda konuştuk."<span class="mockup-cursor"></span></div>
+        </div>
+
+        <!-- Arrow separator -->
+        <div class="mockup-arrow">↓ ↓ ↓</div>
+
+        <!-- Variants label -->
+        <div class="mockup-variants-label" data-lang="de">3 Varianten – KI-generiert</div>
+        <div class="mockup-variants-label" data-lang="en">3 variants – AI-generated</div>
+
+        <!-- Business -->
+        <div class="variant-row v-business" id="v1">
+          <span class="variant-badge">Business</span>
+          <div class="variant-content">
+            <div class="variant-text">Toplantıda projeyi detaylıca istişare ettik.</div>
+            <div class="variant-note" data-lang="de">Formell · Büro & Verhandlung</div>
+            <div class="variant-note" data-lang="en">Formal · Office & negotiation</div>
+          </div>
+        </div>
+
+        <!-- Colloquial -->
+        <div class="variant-row v-colloquial" id="v2">
+          <span class="variant-badge" data-lang="de">Alltag</span>
+          <span class="variant-badge" data-lang="en">Everyday</span>
+          <div class="variant-content">
+            <div class="variant-text">Toplantıda bolca konuştuk, fikirler ortaya döküldü.</div>
+            <div class="variant-note" data-lang="de">Natürlich · Schlagfertig</div>
+            <div class="variant-note" data-lang="en">Natural · Vivid</div>
+          </div>
+        </div>
+
+        <!-- C1 -->
+        <div class="variant-row v-c1" id="v3">
+          <span class="variant-badge">C1</span>
+          <div class="variant-content">
+            <div class="variant-text">Toplantı esnasında konuyu enine boyuna tartıştık.</div>
+            <div class="variant-note" data-lang="de">C1-Niveau · Deyim: <em>enine boyuna</em></div>
+            <div class="variant-note" data-lang="en">C1-level · Deyim: <em>enine boyuna</em></div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ PAIN POINTS ═══════════ -->
+  <section class="section">
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text" data-lang="de">Das kennt jeder</span>
+      <span class="section-label-text" data-lang="en">Sound familiar?</span>
+    </div>
+    <h2 class="section-title" data-lang="de">Türkisch fühlt sich nach dem Gespräch anders an als auf Papier.</h2>
+    <h2 class="section-title" data-lang="en">Turkish feels different when you have to write it down.</h2>
+
+    <div class="pain-grid">
+      <div class="pain-card">
+        <div class="pain-icon">🗣️</div>
+        <div class="pain-title" data-lang="de">„Ich kann reden, aber nicht schreiben"</div>
+        <div class="pain-title" data-lang="en">"I can speak but can't write"</div>
+        <div class="pain-desc" data-lang="de">Im Gespräch fließt es – aber formelle E-Mails oder Berichte wirken unsicher und fehlerhaft.</div>
+        <div class="pain-desc" data-lang="en">Conversation flows naturally – but formal emails or reports feel shaky and error-prone.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🏢</div>
+        <div class="pain-title" data-lang="de">Business-Türkisch ist eine eigene Sprache</div>
+        <div class="pain-title" data-lang="en">Business Turkish is its own language</div>
+        <div class="pain-desc" data-lang="de">Verhandlungen, Präsentationen, offizielle Dokumente – der formale Register fehlt und macht einen schlechten Eindruck.</div>
+        <div class="pain-desc" data-lang="en">Negotiations, presentations, official documents – the formal register is missing and creates a poor impression.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">🇩🇪</div>
+        <div class="pain-title" data-lang="de">Heritage Speaker: zwischen zwei Sprachen</div>
+        <div class="pain-title" data-lang="en">Heritage speaker: caught between two languages</div>
+        <div class="pain-desc" data-lang="de">Du wurdest mit Türkisch groß – aber formales, geschriebenes Türkisch wurde nie richtig gelernt. Die Lücke schließt sich nicht von allein.</div>
+        <div class="pain-desc" data-lang="en">You grew up with Turkish – but formal, written Turkish was never properly learned. The gap doesn't close on its own.</div>
+      </div>
+      <div class="pain-card">
+        <div class="pain-icon">📜</div>
+        <div class="pain-title" data-lang="de">Deyimler: schön, aber woher?</div>
+        <div class="pain-title" data-lang="en">Deyimler: beautiful, but where to start?</div>
+        <div class="pain-desc" data-lang="de">Redewendungen machen Türkisch lebendig und ausdrucksstark – aber kein Kurs erklärt dir, welche wirklich passen.</div>
+        <div class="pain-desc" data-lang="en">Idioms bring Turkish to life – but no course teaches you which ones actually fit your context.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ FEATURES ═══════════ -->
+  <section class="features-section">
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text" data-lang="de">Wie TürkçePro hilft</span>
+      <span class="section-label-text" data-lang="en">How TürkçePro helps</span>
+    </div>
+    <h2 class="section-title" data-lang="de">Schreib. Bekomm Feedback. Werde besser.</h2>
+    <h2 class="section-title" data-lang="en">Write. Get feedback. Improve.</h2>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-num">01</div>
+        <div class="feature-icon">✍️</div>
+        <div class="feature-title" data-lang="de">Tägliche Schreibübungen</div>
+        <div class="feature-title" data-lang="en">Daily Writing Exercises</div>
+        <div class="feature-desc" data-lang="de">Business, Politik, Sport – echte Themen die dich fordern. Oder schreib über eigene Themen. Aktiv üben statt passiv lesen.</div>
+        <div class="feature-desc" data-lang="en">Business, politics, sports – real topics that challenge you. Or write about your own topics. Active practice beats passive reading.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">02</div>
+        <div class="feature-icon">🤖</div>
+        <div class="feature-title" data-lang="de">AI-Korrekturen auf Deutsch</div>
+        <div class="feature-title" data-lang="en">AI Corrections in Your Language</div>
+        <div class="feature-desc" data-lang="de">Jeder Fehler wird erklärt – warum es falsch war, wie es richtig ist, und 3 Varianten: Business, Alltag, C1-Niveau.</div>
+        <div class="feature-desc" data-lang="en">Every mistake is explained – why it was wrong, how to fix it, and 3 variants: business, everyday, C1-level.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">03</div>
+        <div class="feature-icon">📊</div>
+        <div class="feature-title" data-lang="de">Persönliches Fehler-Tracking</div>
+        <div class="feature-title" data-lang="en">Personal Error Tracking</div>
+        <div class="feature-desc" data-lang="de">Die App erkennt deine Fehler-Muster und zeigt dir, was du immer wieder falsch machst – bis du es wirklich beherrschst.</div>
+        <div class="feature-desc" data-lang="en">The app recognizes your error patterns and shows what you keep getting wrong – until you've truly mastered it.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">04</div>
+        <div class="feature-icon">📜</div>
+        <div class="feature-title" data-lang="de">Deyimler-Wörterbuch</div>
+        <div class="feature-title" data-lang="en">Deyimler Dictionary</div>
+        <div class="feature-desc" data-lang="de">Sammle alle Redewendungen die du lernst in deinem persönlichen Wörterbuch. Mit Kontext aus deinen eigenen Texten.</div>
+        <div class="feature-desc" data-lang="en">Collect all the idioms you learn in your personal dictionary. With context from your own writing.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">05</div>
+        <div class="feature-icon">📚</div>
+        <div class="feature-title" data-lang="de">Übungs-Historie</div>
+        <div class="feature-title" data-lang="en">Exercise History</div>
+        <div class="feature-desc" data-lang="de">Sieh wie weit du gekommen bist. Alle deine Texte, Korrekturen und Varianten – jederzeit abrufbar.</div>
+        <div class="feature-desc" data-lang="en">See how far you've come. All your texts, corrections, and variants – available anytime.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-num">06</div>
+        <div class="feature-icon">🎯</div>
+        <div class="feature-title" data-lang="de">Fokus auf B1→C1</div>
+        <div class="feature-title" data-lang="en">Focused on B1→C1</div>
+        <div class="feature-desc" data-lang="de">Ab B1 aufwärts. Für Leute die die Grundlagen haben und jetzt wirklich flüssig, formal und ausdrucksstark werden wollen – bis zum C1-Niveau.</div>
+        <div class="feature-desc" data-lang="en">From B1 upward. For people who have the basics and now want to become truly fluent, formal, and expressive – all the way to C1 level.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ SOCIAL PROOF ═══════════ -->
+  <section class="quote-section">
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text" data-lang="de">Beta-Feedback</span>
+      <span class="section-label-text" data-lang="en">Beta Feedback</span>
+    </div>
+    <h2 class="section-title" data-lang="de">Was frühe Nutzer sagen</h2>
+    <h2 class="section-title" data-lang="en">What early users say</h2>
+
+    <div class="quote-grid">
+      <div class="quote-card">
+        <div class="quote-stars">★★★★★</div>
+        <p class="quote-text" data-lang="de">„Endlich verstehe ich warum meine türkischen Kollegen manche meiner E-Mails komisch finden. Die Business-Varianten sind Gold wert."</p>
+        <p class="quote-text" data-lang="en">"I finally understand why my Turkish colleagues found some of my emails strange. The business variants are worth their weight in gold."</p>
+        <p class="quote-author" data-lang="de">Markus T., <span>B1-Lerner, München</span></p>
+        <p class="quote-author" data-lang="en">Markus T., <span>B1 learner, Munich</span></p>
+      </div>
+      <div class="quote-card">
+        <div class="quote-stars">★★★★★</div>
+        <p class="quote-text" data-lang="de">„Als Deutsch-Türkin hab ich Türkisch nie richtig gelernt – nur gesprochen. TürkçePro zeigt mir genau was ich in formalen Texten falsch mache."</p>
+        <p class="quote-text" data-lang="en">"As a German-Turk, I never properly learned Turkish – I just spoke it. TürkçePro shows me exactly what I get wrong in formal texts."</p>
+        <p class="quote-author" data-lang="de">Selin K., <span>Heritage Speaker, Berlin</span></p>
+        <p class="quote-author" data-lang="en">Selin K., <span>Heritage speaker, Berlin</span></p>
+      </div>
+      <div class="quote-card">
+        <div class="quote-stars">★★★★★</div>
+        <p class="quote-text" data-lang="de">„Das Deyimler-Feature ist einzigartig. Ich lerne Redewendungen im Kontext meiner eigenen Texte – das bleibt viel besser hängen."</p>
+        <p class="quote-text" data-lang="en">"The deyimler feature is unique. I learn idioms in the context of my own writing – it sticks so much better."</p>
+        <p class="quote-author" data-lang="de">Ayşe D., <span>C1-Kandidatin, Hamburg</span></p>
+        <p class="quote-author" data-lang="en">Ayşe D., <span>C1 candidate, Hamburg</span></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════ BOTTOM CTA ═══════════ -->
+  <section class="bottom-cta">
+    <div class="section-label">
+      <div class="section-label-line"></div>
+      <span class="section-label-text" data-lang="de">Jetzt dabei sein</span>
+      <span class="section-label-text" data-lang="en">Join now</span>
+    </div>
+    <h2 class="section-title" data-lang="de">Bereit für echtes C1-Türkisch?</h2>
+    <h2 class="section-title" data-lang="en">Ready for real C1 Turkish?</h2>
+    <p class="bottom-cta-desc" data-lang="de">Kostenloser Beta-Zugang. Keine Kreditkarte. Limitierte Plätze.</p>
+    <p class="bottom-cta-desc" data-lang="en">Free beta access. No credit card. Limited spots.</p>
+
+    <div class="bottom-form">
+      <input class="bottom-input" type="email" id="email-bottom" placeholder="deine@email.de" />
+      <button class="bottom-btn" onclick="submitEmail('email-bottom', 'success-bottom')" data-lang="de">Beta-Zugang</button>
+      <button class="bottom-btn" onclick="submitEmail('email-bottom', 'success-bottom')" data-lang="en" style="display:none">Get Beta Access</button>
+    </div>
+    <div class="success-msg" id="success-bottom" style="max-width:480px; margin: 16px auto 0; justify-content:center;">
+      ✓ <span data-lang="de">Danke! Wir melden uns in Kürze.</span><span data-lang="en">Thanks! We'll be in touch soon.</span>
+    </div>
+    <p class="bottom-note" data-lang="de">Kein Spam. Nur ein kurzes Update wenn die Beta startet.</p>
+    <p class="bottom-note" data-lang="en">No spam. Just a short update when the beta launches.</p>
+  </section>
+
+  <!-- ═══════════ FOOTER ═══════════ -->
+  <footer>
+    <div class="footer-brand">Türkçe<span>Pro</span></div>
+    <div class="footer-note" data-lang="de">© 2026 TürkçePro · Made with ❤️ für Türkisch-Lernende</div>
+    <div class="footer-note" data-lang="en">© 2026 TürkçePro · Made with ❤️ for Turkish learners</div>
+  </footer>
+
+  <script>
+    function setLang(lang) {
+      document.body.className = 'lang-' + lang;
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+      document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
+
+      // fix CTA buttons visibility
+      document.querySelectorAll('.cta-btn, .bottom-btn').forEach(btn => {
+        const btnLang = btn.getAttribute('data-lang');
+        if (btnLang) btn.style.display = btnLang === lang ? '' : 'none';
+      });
+    }
+
+    function submitEmail(inputId, successId) {
+      const input = document.getElementById(inputId);
+      const email = input.value.trim();
+      if (!email || !email.includes('@')) {
+        input.style.borderColor = 'red';
+        setTimeout(() => input.style.borderColor = '', 1500);
+        return;
+      }
+      // Store email (in production: send to backend)
+      const emails = JSON.parse(localStorage.getItem('beta_emails') || '[]');
+      emails.push({ email, ts: new Date().toISOString() });
+      localStorage.setItem('beta_emails', JSON.stringify(emails));
+
+      input.value = '';
+      const success = document.getElementById(successId);
+      success.style.display = 'flex';
+      setTimeout(() => success.style.display = 'none', 5000);
+    }
+
+    // Detect browser language
+    const browserLang = navigator.language.startsWith('de') ? 'de' : 'en';
+    setLang(browserLang);
+
+    // Staggered reveal for variant rows
+    function revealVariants() {
+      const rows = ['v1','v2','v3'];
+      rows.forEach((id, i) => {
+        setTimeout(() => {
+          const el = document.getElementById(id);
+          if (el) el.classList.add('visible');
+        }, 600 + i * 350);
+      });
+    }
+
+    // Re-trigger on scroll into view
+    const heroRight = document.querySelector('.hero-right');
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        // Reset then re-animate
+        ['v1','v2','v3'].forEach(id => {
+          const el = document.getElementById(id);
+          if (el) el.classList.remove('visible');
+        });
+        revealVariants();
+      }
+    }, { threshold: 0.3 });
+    if (heroRight) observer.observe(heroRight);
+    revealVariants();
+  </script>
+</body>
+</html>
