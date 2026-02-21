@@ -168,6 +168,7 @@
       white-space: nowrap;
     }
     .cta-btn:hover { background: var(--red-dark); }
+    a.cta-btn, a.bottom-btn { text-decoration: none; }
 
     .cta-note {
       font-size: 13px;
@@ -677,12 +678,8 @@
 
       <div class="cta-group">
         <div class="cta-input-row">
-          <input class="cta-input" type="email" id="email-hero" placeholder="deine@email.de" />
-          <button class="cta-btn" onclick="submitEmail('email-hero', 'success-hero')" data-lang="de">Beta-Zugang anfragen</button>
-          <button class="cta-btn" onclick="submitEmail('email-hero', 'success-hero')" data-lang="en" style="display:none">Request Beta Access</button>
-        </div>
-        <div class="success-msg" id="success-hero">
-          ✓ <span data-lang="de">Danke! Wir melden uns in Kürze.</span><span data-lang="en">Thanks! We'll be in touch soon.</span>
+          <a class="cta-btn" href="https://turkish-b1c1-trainer.vercel.app" data-lang="de">Beta-Zugang anfragen</a>
+          <a class="cta-btn" href="https://turkish-b1c1-trainer.vercel.app" data-lang="en" style="display:none">Request Beta Access</a>
         </div>
         <p class="cta-note" data-lang="de">Kostenloser Beta-Zugang · <strong>Limitierte Plätze</strong> · Kein Spam</p>
         <p class="cta-note" data-lang="en">Free beta access · <strong>Limited spots</strong> · No spam</p>
@@ -901,12 +898,8 @@
     <p class="bottom-cta-desc" data-lang="en">Free beta access. No credit card. Limited spots.</p>
 
     <div class="bottom-form">
-      <input class="bottom-input" type="email" id="email-bottom" placeholder="deine@email.de" />
-      <button class="bottom-btn" onclick="submitEmail('email-bottom', 'success-bottom')" data-lang="de">Beta-Zugang</button>
-      <button class="bottom-btn" onclick="submitEmail('email-bottom', 'success-bottom')" data-lang="en" style="display:none">Get Beta Access</button>
-    </div>
-    <div class="success-msg" id="success-bottom" style="max-width:480px; margin: 16px auto 0; justify-content:center;">
-      ✓ <span data-lang="de">Danke! Wir melden uns in Kürze.</span><span data-lang="en">Thanks! We'll be in touch soon.</span>
+      <a class="bottom-btn" href="https://turkish-b1c1-trainer.vercel.app" data-lang="de">Beta-Zugang</a>
+      <a class="bottom-btn" href="https://turkish-b1c1-trainer.vercel.app" data-lang="en" style="display:none">Get Beta Access</a>
     </div>
     <p class="bottom-note" data-lang="de">Kein Spam. Nur ein kurzes Update wenn die Beta startet.</p>
     <p class="bottom-note" data-lang="en">No spam. Just a short update when the beta launches.</p>
